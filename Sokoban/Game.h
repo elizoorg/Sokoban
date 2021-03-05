@@ -5,7 +5,6 @@
 #include "EventHandler.h"
 #include "Level.h"
 #include "Player.h"
-#define FPS 60
 
 class Game
 {
@@ -25,7 +24,8 @@ private:
 	SDL_Event event;
 	EventHandler* handler;
 	bool _end = false;
-
+	int FPS = 60;
+	int lastFrame, frameCount,lastTime,timerFPS;
 
 	Player player;
 	Level level;

@@ -50,18 +50,27 @@ void Game::Input()
 
 void Game::Loop()
 {
-    Uint64 start = SDL_GetPerformanceCounter();
+    lastFrame = SDL_GetTicks();
+    if (lastFrame >= (lastTime + 1000) ){
+        lastTime=lastFrame;
+        FPS=frameCount;
+        frameCount=0;
+    }
+
+
+
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) _end = false;
         handler->Handle(&event);
     }
+
     Input();
+
     Update();
+
     Draw();
-   
-    Uint64 end = SDL_GetPerformanceCounter();
-    float elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-    SDL_Delay(floor(16.666f - elapsedMS));
+  
+
 }
 
 void Game::Draw()
@@ -70,6 +79,11 @@ void Game::Draw()
 
     level.Draw(render);
     player.Draw(render);
+    frameCount++;
+
+    timerFPS = SDL_GetTicks()-lastFrame;
+    if (timerFPS < (1000 / 60))
+        SDL_Delay(1000 / 60-timerFPS);
 
     SDL_RenderPresent(render);
 }
