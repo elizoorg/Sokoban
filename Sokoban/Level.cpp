@@ -12,7 +12,17 @@ Level::~Level()
 
 bool Level::LoadLevel(SDL_Renderer *render ,std::string filepath,std::string tileMapPath)
 {
-
+    if (tilemap) {
+        SDL_DestroyTexture(tilemap);
+    }
+    if (map) {
+        for (int i = 0; i < w; i++)
+            delete map[i];
+        delete map;
+    }
+    finishCount = 0;
+    currentfinishCount = 0;
+    w = h = 0;
     SDL_Surface* temp = IMG_Load(tileMapPath.c_str());
     tilemap = SDL_CreateTextureFromSurface(render, temp);
     SDL_FreeSurface(temp);
@@ -32,17 +42,26 @@ bool Level::LoadLevel(SDL_Renderer *render ,std::string filepath,std::string til
                 playerPos.y = i;
                 map[i][j] = map[i][j - 1];
             }
+            if (map[i][j] == 3) {
+                finishCount++;
+            }
         }
+    file.close();
     return true;
 }
 
 void Level::Draw(SDL_Renderer* render)
 {
-
-    for(int i = 0 ; i < w ; i ++) 
-        for (int j = 0; j < h; j++) {
-            destRect.x = 128 * i;
-            destRect.y = 128 * j;
+    int lclipX=playerPos.x-7, lclipY=playerPos.y-4;
+    int rclipX=playerPos.x+7, rclipY=playerPos.y+4;
+    if (playerPos.x - 7 < 0) lclipX = 0;
+    if (playerPos.x + 7 > w) rclipX = w;
+    if (playerPos.y - 4 < 0) lclipY = 0;
+    if (playerPos.y + 4 > h) rclipY = h;
+    for(int i = lclipX ; i < rclipX ; i ++) 
+        for (int j = lclipY; j <rclipY; j++) {
+            destRect.x = 384+128 * (i%15);
+            destRect.y = -34+128 * (j%9);
             sourceRect.x = 128 * map[i][j];
             SDL_RenderCopy(render, tilemap, &sourceRect, &destRect);
         }
@@ -68,7 +87,7 @@ bool Level::Move(int direction)
         else if (map[playerPos.x + 2 * moveX][playerPos.y + 2 * moveY] == 3) {
             map[playerPos.x + 2 * moveX][playerPos.y + 2 * moveY] = 4;
             map[playerPos.x + moveX][playerPos.y + moveY] = 1;
-
+            currentfinishCount++;
         }
         else return 0;
         break;

@@ -45,7 +45,15 @@ void Game::Input()
         if (level.Move(3))
         player.Move(3);
     }
-   
+    if (handler->KeyDown(SDLK_r)) {
+        if (!level.LoadLevel(render, "levels/1.txt", "texture/tilemap.png")) {
+            std::cout << "Count not load a level: level.txt\n";
+           
+        }
+        
+        player.setPos(level.getplayerPos());
+
+   }
 }
 
 void Game::Loop()
@@ -90,7 +98,9 @@ void Game::Draw()
 
 void Game::Update()
 {
-    
+    if (level.win()) {
+        _end = false;
+    }
 }
 
 
@@ -98,7 +108,7 @@ bool Game::Init()
 {
     SDL_Init(SDL_INIT_VIDEO);
 
-    window = SDL_CreateWindow("An SDL2 window",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,1920,1080,SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("An SDL2 window",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,1920,1080,SDL_WINDOW_SHOWN || SDL_WINDOW_FULLSCREEN);
     if (window == NULL) {
         std::cout << "Could not create window: " << SDL_GetError() << '\n';
         return false;

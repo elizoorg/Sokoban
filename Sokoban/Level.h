@@ -15,11 +15,13 @@ public:
 	vec2i getplayerPos() { return playerPos; }
 	int getTile(int x, int y) { return map[y][x]; }
 	bool Move(int direction);
-
+	bool win() { return finishCount == currentfinishCount; }
 private:
 	int **map;
 	int w, h;
 	SDL_Texture* tilemap;
+	int finishCount;
+	int currentfinishCount;
 	SDL_Rect sourceRect{ 0,0,128,128 };
 	SDL_Rect destRect{ 0,0,128,128 };
 	vec2i playerPos;
