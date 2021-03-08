@@ -9,8 +9,8 @@ public:
 	~Player();
 	bool Init(SDL_Renderer* render,std::string filepath);
 	void setPos(vec2i pos) { playerPos = pos; }
-	void Draw(SDL_Renderer* render);
-	void Move(int direction);
+	void Draw(SDL_Renderer* render, float scale, int startX, int startY);
+	void Move(int dir);
 
 private:
 	SDL_Texture* PlayerTexture;

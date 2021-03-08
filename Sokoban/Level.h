@@ -11,7 +11,7 @@ public:
 	~Level();
 	Level();
 	bool LoadLevel(SDL_Renderer* render, std::string filePath,std::string tileMapPath);
-	void Draw(SDL_Renderer* render);
+	void Draw(SDL_Renderer* render, float scale, int startX, int startY);
 	vec2i getplayerPos() { return playerPos; }
 	int getTile(int x, int y) { return map[y][x]; }
 	bool Move(int direction);

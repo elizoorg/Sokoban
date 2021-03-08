@@ -17,24 +17,23 @@ bool Player::Init(SDL_Renderer* render, std::string filepath)
 	return true;
 }
 
-void Player::Draw(SDL_Renderer* render)
+void Player::Draw(SDL_Renderer* render,float scale, int startX, int startY)
 {
-	sourceRect.x = (direction-1) * 128;
-	distRect.x = 1920/2-sourceRect.w/2 ;
-	distRect.y = 1080/2-sourceRect.h/2;
+	distRect.w = distRect.h = 128 * scale;
+	sourceRect.x = (direction) * 128;
+	distRect.x = (playerPos.x)*128*scale+startX;
+	distRect.y = (playerPos.y)*128*scale+startY;
 	SDL_RenderCopy(render, PlayerTexture, &sourceRect, &distRect);
-	distRect.x = (1920/2-3.0/2*sourceRect.w);
-	SDL_SetRenderDrawColor(render, 255, 0, 0, 0);
 	SDL_RenderDrawRect(render, &distRect);
 }
 
-void Player::Move(int direction)
+void Player::Move(int dir)
 {
-	switch (direction) {
+	switch (dir) {
 	case 0: playerPos.x--; break;
 	case 1:playerPos.y--; break;
 	case 2: playerPos.x++; break;
 	case 3:playerPos.y++; break;
 	}
-	direction = direction;
+    direction = dir;
 }

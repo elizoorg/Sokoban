@@ -50,27 +50,25 @@ bool Level::LoadLevel(SDL_Renderer *render ,std::string filepath,std::string til
     return true;
 }
 
-void Level::Draw(SDL_Renderer* render)
+void Level::Draw(SDL_Renderer* render,float scale,int startX,int startY)
 {
-    int lclipX=playerPos.x-7, lclipY=playerPos.y-4;
-    int rclipX=playerPos.x+7, rclipY=playerPos.y+4;
-    if (playerPos.x - 7 < 0) lclipX = 0;
-    if (playerPos.x + 7 > w) rclipX = w;
-    if (playerPos.y - 4 < 0) lclipY = 0;
-    if (playerPos.y + 4 > h) rclipY = h;
-    for(int i = lclipX ; i < rclipX ; i ++) 
-        for (int j = lclipY; j <rclipY; j++) {
-            destRect.x = 384+128 * (i%15);
-            destRect.y = -34+128 * (j%9);
+    destRect.w = 128 * scale;
+    destRect.h = 128 * scale;
+    for (int i = 0; i < w; i++) {
+        for (int j = 0; j < h; j++) {
+            destRect.x = destRect.w * i+startX;
+            destRect.y = destRect.h * j+startY;
             sourceRect.x = 128 * map[i][j];
             SDL_RenderCopy(render, tilemap, &sourceRect, &destRect);
         }
+     
+    }
 
 
 }
 
 bool Level::Move(int direction)
-{
+{  
     int moveX, moveY;
     switch (direction){
     case 0: moveX = -1; moveY = 0; break;
@@ -79,7 +77,7 @@ bool Level::Move(int direction)
     case 3: moveX = 0; moveY = 1; break;
     }
     switch (map[playerPos.x + moveX][playerPos.y + moveY]) {
-    case 1: break;
+    case 1: case 3: break;
     case 2: 
         if (map[playerPos.x + 2 * moveX][playerPos.y + 2 * moveY] == 1) 
             swap(map[playerPos.x + 2 * moveX][playerPos.y + 2 * moveY],
@@ -90,11 +88,7 @@ bool Level::Move(int direction)
             currentfinishCount++;
         }
         else return 0;
-        break;
-    case 3:
-
-          break;
-    
+        break;  
     default:return 0; break;
     }
     

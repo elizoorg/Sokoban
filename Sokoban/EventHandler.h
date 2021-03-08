@@ -27,6 +27,7 @@ public:
 		mouse_down.clear();
 		shift = 0;
 	};
+	short GetMouseShift() { return shift; }
 
 private:
 	static EventHandler* sInstance;
