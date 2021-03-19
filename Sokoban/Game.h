@@ -37,7 +37,7 @@ private:
 	TTF_Font* font;
 	SDL_Color fontColor{ 255,255,255 };
 	SDL_Rect fontRect{ 0,0,64,128 };
-	SDL_Rect rulesRect{ 1520,0,64,128 };
+	SDL_Rect rulesRect{ 920,0,64,128 };
 	float scale = 1;
 	int nx, ny, mx, my;
 	bool pressed;

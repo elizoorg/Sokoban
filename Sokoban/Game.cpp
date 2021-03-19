@@ -167,8 +167,8 @@ void Game::Draw()
 
 
     timerFPS = SDL_GetTicks()-lastFrame;
-    if (timerFPS < (1000 / 30))
-        SDL_Delay(1000 / 30-timerFPS);
+    if (timerFPS < (1000 / 15))
+        SDL_Delay(1000 / 15-timerFPS);
 
     SDL_RenderPresent(render);
 }
@@ -230,7 +230,7 @@ void Game::Scores()
     SDL_Texture* text;
     SDL_Texture* name;
 
-    SDL_Rect button{ 499,799,920,150 };
+    SDL_Rect button{ 450,532,384,64 };
 
 
     SDL_RenderClear(render);
@@ -273,8 +273,8 @@ void Game::Scores()
                 break;
             }
         if (lButton) {
-            if (mouseX > 499 && mouseX < 1419) {
-                if (mouseY > 749 && mouseY < 899) {
+            if (mouseX > 450 && mouseX < 934) {
+                if (mouseY > 532 && mouseY < 596) {
                     mouseX = mouseY = 0;
                     done = true;
                 }
@@ -283,28 +283,28 @@ void Game::Scores()
         SDL_SetRenderDrawColor(render, 230, 230, 255, 0);
         SDL_RenderClear(render);
         
-        r.y = 250;
+        r.y = 150;
         text_surface = TTF_RenderUTF8_Solid(font, "Your Score is: ", color_fon);
         r.w = text_surface->w;
-        r.x = 960 - r.w / 2;
+        r.x = 640 - r.w / 2;
         r.h = text_surface->h;
         text = SDL_CreateTextureFromSurface(render, text_surface);
         SDL_FreeSurface(text_surface);
         SDL_RenderCopy(render, text, NULL, &r);
         SDL_DestroyTexture(text);
         text_surface = TTF_RenderUTF8_Solid(font, buff, color_fon);
-        r.y = 350;
+        r.y = 250;
         r.w = text_surface->w;
-        r.x = 960 - r.w / 2;
+        r.x = 640 - r.w / 2;
         r.h = text_surface->h;
         text = SDL_CreateTextureFromSurface(render, text_surface);
         SDL_FreeSurface(text_surface);
         SDL_RenderCopy(render, text, NULL, &r);
         SDL_DestroyTexture(text);
         name_surface = TTF_RenderUTF8_Solid(font, player1.Name, color_fon);
-        r.y = 500;
+        r.y = 350;
         r.w = name_surface->w;
-        r.x = 960 - r.w / 2;
+        r.x = 640 - r.w / 2;
         r.h = name_surface->h;
 
         name = SDL_CreateTextureFromSurface(render, name_surface);
@@ -389,12 +389,12 @@ void Game::Scores()
     }
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 153, 153, 255, 0);
-    SDL_Rect rr = { 499, 214, 920, 520 };
-    SDL_Rect rr1 = { 509, 224, 900, 500 };
+    SDL_Rect rr = { 0, 0, 1280,720 };
+    SDL_Rect rr1 = { 20,20, 1240, 680 };
     SDL_RenderFillRect(render, &rr);
     SDL_SetRenderDrawColor(render, 230, 230, 255, 0);
     SDL_RenderFillRect(render, &rr1);
-    r.y = 224;
+    r.y = 104;
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
 
     if (file1)
@@ -402,7 +402,7 @@ void Game::Scores()
         rewind(file1);
         while (fread(&player_score, sizeof(player_score), 1, file1))
         {
-            r.x = 519;
+            r.x = 369;
             if (strlen(player_score.Name))
                 sprintf(buf, "%s", player_score.Name);
             else sprintf(buf, "%s", "Unknown");
@@ -412,7 +412,7 @@ void Game::Scores()
             text = SDL_CreateTextureFromSurface(render, text_surface);
             SDL_FreeSurface(text_surface);
             SDL_RenderCopy(render, text, NULL, &r);
-            r.x = 979;
+            r.x = 839;
           
             sprintf(buf, "%d", player_score.score);
             text_surface = TTF_RenderUTF8_Solid(font, buf, color_fon);
@@ -436,13 +436,15 @@ void Game::Scores()
 bool Game::Init()
 {
     SDL_Init(SDL_INIT_VIDEO);
+
+
     TTF_Init();
-    window = SDL_CreateWindow("An SDL2 window",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,1920,1080,SDL_WINDOW_SHOWN || SDL_WINDOW_FULLSCREEN);
+    window = SDL_CreateWindow("Sokoban",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,1280,720,SDL_WINDOW_SHOWN );
     if (window == NULL) {
         std::cout << "Could not create window: " << SDL_GetError() << '\n';
         return false;
     }
-    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
     if (render == NULL) {
         std::cout << "Could not create render: " << SDL_GetError() << '\n';
         return false;

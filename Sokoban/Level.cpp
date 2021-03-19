@@ -38,9 +38,9 @@ bool Level::LoadLevel(SDL_Renderer *render ,std::string filepath,std::string til
         for (int j = 0; j < h; j++) {
             file >> map[i][j];
             if (map[i][j] == 1000) {
-                playerPos.x = j;
-                playerPos.y = i;
-                map[i][j] = map[i][j - 1];
+                playerPos.x = i;
+                playerPos.y = j;
+                map[i][j] = 1;
             }
             if (map[i][j] == 3) {
                 finishCount++;
@@ -56,6 +56,7 @@ void Level::Draw(SDL_Renderer* render,float scale,int startX,int startY)
     destRect.h = 128 * scale;
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
+            if(map[i][j]==-1 ) continue;
             destRect.x = destRect.w * i+startX;
             destRect.y = destRect.h * j+startY;
             sourceRect.x = 128 * map[i][j];
